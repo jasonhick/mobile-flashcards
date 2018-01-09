@@ -25,6 +25,7 @@
 	},
 	"dependencies": {
 		"expo": "^23.0.4",
+		"native-base": "^2.3.6",
 		"react": "16.0.0",
 		"react-native": "0.50.3",
 		"react-native-scripts": "1.8.1",

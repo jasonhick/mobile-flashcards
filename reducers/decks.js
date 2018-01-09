@@ -8,6 +8,16 @@ function decks(state = [], action) {
 				...action.decks
 			};
 
+		case actionType.ADD_DECK:
+			const { title } = action;
+			return {
+				...state,
+				[title]: {
+					title,
+					questions: []
+				}
+			};
+
 		default:
 			return state;
 	}

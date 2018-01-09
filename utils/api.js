@@ -35,9 +35,28 @@ function loadInitialData() {
 
 export function setupInitialResults(results) {
 	return results === null ? loadInitialData() : JSON.parse(results);
+	// return loadInitialData();
 }
 
-// Should return all decks + titles, questions, answers.
 export function fetchDecks() {
 	return AsyncStorage.getItem(ASYNC_STORAGE_KEY).then(setupInitialResults);
+}
+
+export function getDeck(title) {
+	return AsyncStorage.getItem(ASYNC_STORAGE_KEY).then(results => {
+		const decks = JSON.parse(results);
+		return decks[title];
+	});
+}
+
+export function saveNewDeck(title) {
+	return AsyncStorage.mergeItem(
+		ASYNC_STORAGE_KEY,
+		JSON.stringify({
+			[title]: {
+				title,
+				questions: []
+			}
+		})
+	);
 }
