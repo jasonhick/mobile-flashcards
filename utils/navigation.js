@@ -4,6 +4,7 @@ import { TabNavigator, StackNavigator } from 'react-navigation';
 import Decks from '../components/Decks';
 import Deck from '../components/Deck';
 import AddDeck from '../components/AddDeck';
+import AddCard from '../components/AddCard';
 import * as c from './colors';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 
@@ -14,13 +15,16 @@ export const Stacks = StackNavigator(
 		},
 		Deck: {
 			screen: Deck,
-			header: null,
-			navigationOptions: ({ navigation }) => ({})
+			header: null
+		},
+		Card: {
+			screen: AddCard
+		},
+		AddCard: {
+			screen: AddCard
 		}
 	},
-	{
-		headerMode: 'none'
-	}
+	{ headerMode: 'none' }
 );
 
 export const Tabs = TabNavigator(
@@ -45,16 +49,11 @@ export const Tabs = TabNavigator(
 		}
 	},
 	{
-		initialRouteName: 'Home',
-		animationEnabled: true,
-		swipeEnabled: true,
 		tabBarOptions: {
-			showLabel: false,
-			activeTintColor: c.gold,
-			inactiveTintColor: c.white,
+			activeTintColor: c.white,
 			style: {
 				height: 56,
-				backgroundColor: c.black
+				backgroundColor: Platform.OS === 'ios' ? c.black : c.black
 			}
 		}
 	}

@@ -13,25 +13,31 @@ import {
 	Body,
 	Text
 } from 'native-base';
-import { withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
-import DeckLink from '../DeckLink';
 import { Constants } from 'expo';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { addNewDeck } from '../../actions/decks';
+import cuid from 'cuid';
+import DeckLink from '../DeckLink';
+import { saveDeck } from '../../actions/decks';
 
 class AddDeck extends Component {
 	state = {
+		id: '',
 		title: '',
 		isValid: false
 	};
 
 	saveDeck() {
-		const { navigation } = this.props;
-		const title = this.state.title;
+		const { navigation, saveDeck } = this.props;
+		const { id, title } = this.state;
+		const deck = {
+			id: cuid(),
+			title
+		};
+
 		Keyboard.dismiss();
-		this.props.addNewDeck(title);
-		navigation.navigate('Deck', { title });
+		saveDeck(deck);
+		navigation.navigate('Decks');
 	}
 
 	render() {
@@ -70,5 +76,5 @@ const s = StyleSheet.create({
 	}
 });
 
-const mapDispatchToProps = { addNewDeck };
+const mapDispatchToProps = { saveDeck };
 export default connect(null, mapDispatchToProps)(AddDeck);

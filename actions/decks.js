@@ -8,15 +8,18 @@ function receiveDecks(decks) {
 	};
 }
 
-function addDeck(title) {
+function addDeck(deck) {
 	return {
 		type: actionType.ADD_DECK,
-		title
+		deck
 	};
 }
 
 export const getAllDecks = () => dispatch =>
 	api.fetchDecks().then(data => dispatch(receiveDecks(data)));
 
-export const addNewDeck = title => dispatch =>
-	api.saveNewDeck(title).then(() => dispatch(addDeck(title)));
+export const saveDeck = deck => dispatch =>
+	api.dbSaveDeck(deck).then(() => dispatch(addDeck(deck)));
+
+// export const addNewDeck = title => dispatch =>
+// 	api.addCardToDeck(title).then(() => dispatch(addDeck(title)));

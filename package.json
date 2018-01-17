@@ -24,6 +24,7 @@
 		"preset": "jest-expo"
 	},
 	"dependencies": {
+		"cuid": "^2.0.2",
 		"expo": "^23.0.4",
 		"native-base": "^2.3.6",
 		"react": "16.0.0",

@@ -10,12 +10,15 @@ import {
 	Label,
 	Input,
 	Button,
+	Left,
 	Body,
+	Right,
 	Text
 } from 'native-base';
 import { connect } from 'react-redux';
 import DeckLink from '../DeckLink';
 import { Constants } from 'expo';
+import * as c from '../../utils/colors';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { getAllDecks } from '../../actions/decks';
 
@@ -24,21 +27,25 @@ class Decks extends Component {
 		this.props.getAllDecks();
 	}
 
+	handleOnRefreshData = () => {
+		this.props.getAllDecks();
+	};
+
 	render() {
 		const { decks, navigation } = this.props;
 		return (
 			<Container>
 				<Header iosBarStyle="light-content" style={[s.header]}>
 					<Body>
-						<Title>Mobile Flashcards</Title>
+						<Title style={[s.title]}>Mobile Flashcards</Title>
 					</Body>
 				</Header>
-				<Content padder>
+				<Content>
 					<FlatList
 						data={decks}
-						keyExtractor={item => item.title}
+						keyExtractor={(item, index) => index}
 						renderItem={({ item }) => (
-							<DeckLink deck={item} navigation={navigation} />
+							<DeckLink key={item.title} deck={item} navigation={navigation} />
 						)}
 					/>
 				</Content>
@@ -49,7 +56,10 @@ class Decks extends Component {
 
 const s = StyleSheet.create({
 	header: {
-		paddingTop: 0
+		backgroundColor: c.black
+	},
+	title: {
+		color: c.white
 	}
 });
 

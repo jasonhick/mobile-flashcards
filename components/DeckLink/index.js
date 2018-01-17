@@ -9,34 +9,30 @@ const DeckLink = ({ deck, navigation }) => (
 		<TouchableOpacity
 			style={[s.view]}
 			onPress={() => navigation.navigate('Deck', { title: deck.title })}>
-			<Text style={[s.f5, { flex: 3 }]}>{deck.title}</Text>
-			<Text style={[s.link]}>{deck.questions.length}</Text>
+			<Text style={[s.title]}>{deck.title}</Text>
+			<Text style={[s.subtitle]}>{deck.questions.length} questions</Text>
 		</TouchableOpacity>
 	</View>
 );
 
 const s = StyleSheet.create({
 	view: {
-		display: 'flex',
-		flexDirection: 'row',
-		alignItems: 'center',
 		marginTop: 5,
 		marginHorizontal: 50,
-		padding: 10,
-		paddingLeft: 20,
-		borderRadius: 50,
+		paddingVertical: 10,
+		borderRadius: 10,
 		backgroundColor: c.gold
 	},
-	link: {
-		width: 30,
-		height: 30,
-		paddingTop: 6,
-		borderRadius: 30 / 2,
-		borderColor: c.yellow,
-		borderWidth: 1,
-		overflow: 'hidden',
+	title: {
+		fontSize: 18,
+		fontWeight: 'bold',
 		textAlign: 'center',
-		color: c.black
+		color: c.nearblack
+	},
+	subtitle: {
+		textAlign: 'center',
+		fontSize: 10,
+		color: c.nearblack
 	}
 });
 

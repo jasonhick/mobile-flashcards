@@ -19,6 +19,8 @@ import {
 import { connect } from 'react-redux';
 import { Constants } from 'expo';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import * as c from '../../utils/colors';
+import CardLink from '../CardLink';
 
 class Deck extends Component {
 	render() {
@@ -33,23 +35,41 @@ class Deck extends Component {
 						</Button>
 					</Left>
 					<Body>
-						<Title>{title}</Title>
-						<Subtitle>{deck.questions.length} Questions</Subtitle>
+						<Title style={[s.title]}>{title}</Title>
+						<Subtitle style={[s.subtitle]}>
+							{deck.questions.length} questions
+						</Subtitle>
 					</Body>
 					<Right />
 				</Header>
 				<Content padder>
-					<FlatList
-						data={deck.questions}
-						keyExtractor={item => item.question}
-						renderItem={({ item }) => <Text>{item.question}</Text>}
-     />
-					<Button block rounded bordered dark style={[s.button]}>
-						<Text>Add question</Text>
+					<Button
+						block
+						rounded
+						bordered
+						dark
+						style={[s.button]}
+						onPress={() =>
+							navigation.navigate('AddCard', {
+								title: 'Add a new card',
+								deck: title
+							})
+						}>
+						<Text>Add a {title} question</Text>
 					</Button>
+
 					<Button block rounded dark style={[s.button]}>
 						<Text>Start quiz</Text>
 					</Button>
+
+					<FlatList
+						style={[s.list]}
+						data={deck.questions}
+						keyExtractor={(item, index) => index}
+						renderItem={({ item }) => (
+							<CardLink deck={deck} card={item} navigation={navigation} />
+						)}
+					/>
 				</Content>
 			</Container>
 		);
@@ -58,10 +78,23 @@ class Deck extends Component {
 
 const s = StyleSheet.create({
 	header: {
-		paddingTop: 0
+		backgroundColor: c.black
+	},
+	title: {
+		color: c.white
+	},
+	subtitle: {
+		color: c.white
 	},
 	button: {
-		marginVertical: 10
+		marginVertical: 5
+	},
+	list: {
+		marginVertical: 20,
+		borderRadius: 5,
+		borderWidth: 1,
+		borderColor: c.midgrey,
+		backgroundColor: c.white
 	}
 });
 

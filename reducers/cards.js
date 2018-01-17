@@ -5,6 +5,17 @@ function cards(state = {}, action) {
 		case actionType.FETCH_CARDS:
 			return state;
 
+		case actionType.ADD_CARD:
+			const { deck, card } = action;
+			return {
+				...state,
+				decks: {
+					[deck]: {
+						...action.card
+					}
+				}
+			};
+
 		default:
 			return state;
 	}
