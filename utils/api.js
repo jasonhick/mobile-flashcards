@@ -20,15 +20,34 @@ function loadInitialData() {
 				}
 			]
 		},
-		JavaScript: {
+		Cats: {
 			id: 'cjcheucxi000204wljjjxh70r',
-			title: 'JavaScript',
+			title: 'Cats',
 			questions: [
 				{
 					id: 'cjchb9qb800020405muiutk83',
-					question: 'What is a closure?',
-					answer:
-						'The combination of a function and the lexical environment within which that function was declared.'
+					question: 'A female cat is called a...',
+					answer: 'Queen'
+				},
+				{
+					id: 'cjchb9qb800020405muiutk84',
+					question: "Should you give cats cow's milk?",
+					answer: 'No. They are lactose intolerant.'
+				},
+				{
+					id: 'cjchb9qb800020405muiutk95',
+					question: 'Name a famous cartoon cat.',
+					answer: 'Garfield. Top Cat. Cheshire Cat.'
+				},
+				{
+					id: 'cjchb9qb801020405muiutk65',
+					question: 'How many hours a day do cats sleep?',
+					answer: '12-16 hours per day.'
+				},
+				{
+					id: 'cjchb9qb801020405muiutk66',
+					question: 'What are the collective nouns used for cats and kittens?',
+					answer: 'A clowder of cats, and a kindle of kittens.'
 				}
 			]
 		}

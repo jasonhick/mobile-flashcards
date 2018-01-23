@@ -3,6 +3,7 @@ import { View, FlatList, StyleSheet } from 'react-native';
 import {
 	Container,
 	Header,
+	Footer,
 	Left,
 	Right,
 	Title,
@@ -28,17 +29,17 @@ class Score extends Component {
 		let msg = '';
 
 		if (percentage === 0) {
-			msg = 'Rubbish!';
+			msg = 'Really? Zero? You cannot be serious!!';
 		} else if (percentage > 0 && percentage <= 25) {
-			msg = 'Not very good';
-		} else if (percentage > 0 && percentage <= 50) {
-			msg = 'Could do better';
+			msg = 'Oh dear. Did you do any homework?';
+		} else if (percentage > 25 && percentage <= 50) {
+			msg = 'Hmmmm. Could do better. Much better!';
 		} else if (percentage > 50 && percentage <= 75) {
-			msg = 'Not bad...';
+			msg = 'Not bad, but you could use some more practice.';
 		} else if (percentage > 75 && percentage < 100) {
 			msg = 'Great score!';
 		} else if (percentage === 100) {
-			msg = 'Excellent!';
+			msg = 'Full House! Excellent score, but maybe you should get out more...';
 		} else {
 			msg = 'Good job.';
 		}
@@ -57,38 +58,37 @@ class Score extends Component {
 						<Title style={[s.title]}>Score</Title>
 					</Body>
 				</Header>
-				<Content
-					padder
-					contentContainerStyle={{
-						flex: 1,
-						flexDirection: 'row'
-					}}>
+				<Content contentContainerStyle={[s.flexRow, s.bgBlack]}>
 					<View style={[s.flexCols]}>
-						<H1>{deck.title}</H1>
-						<H2>{msg}</H2>
-						<Text>{percentage}%</Text>
-						<Text>
-							You got {score} of {deck.questions.length} correct
-						</Text>
-						<View>
-							<Button
-								block
-								onPress={() => navigation.navigate('Quiz', { deck })}>
-								<Text>Restart Quiz</Text>
-							</Button>
-
-							<Button
-								block
-								onPress={() =>
-									navigation.navigate('Deck', {
-										deck
-									})
-								}>
-								<Text>Back to Deck</Text>
-							</Button>
-						</View>
+						<Text style={[s.text, s.score]}>{percentage}%</Text>
+						{score === 1 ? (
+							<Text style={[s.text]}>You got 1 question wrong</Text>
+						) : (
+							<Text style={[s.text]}>
+								You got {deck.questions.length - score} questions wrong
+							</Text>
+						)}
+						<Text style={[s.text, s.tease]}>{msg}</Text>
 					</View>
 				</Content>
+
+				<Footer>
+					<View style={[s.flexRow, s.spaceAround, s.footer]}>
+						<Button block onPress={() => navigation.navigate('Quiz', { deck })}>
+							<Text>Restart Quiz</Text>
+						</Button>
+
+						<Button
+							block
+							onPress={() =>
+								navigation.navigate('Deck', {
+									deck
+								})
+							}>
+							<Text>Back to Deck</Text>
+						</Button>
+					</View>
+				</Footer>
 			</Container>
 		);
 	}
@@ -98,11 +98,20 @@ const s = StyleSheet.create({
 	header: {
 		backgroundColor: c.black
 	},
-	title: {
+	text: {
+		marginVertical: 10,
 		color: c.white
 	},
-	subtitle: {
-		color: c.white
+	score: {
+		fontSize: 70
+	},
+	tease: {
+		marginHorizontal: 40,
+		fontSize: 40,
+		textAlign: 'center'
+	},
+	center: {
+		textAlign: 'center'
 	},
 	button: {
 		marginVertical: 5,
@@ -111,13 +120,27 @@ const s = StyleSheet.create({
 	center: {
 		textAlign: 'center'
 	},
+	flexRow: {
+		flex: 1,
+		flexDirection: 'row'
+	},
 	flexCols: {
 		flex: 1,
 		flexDirection: 'column',
 		alignItems: 'center',
-		justifyContent: 'flex-start',
-		borderWidth: 1,
+		justifyContent: 'center',
 		borderColor: c.black
+	},
+	bgBlack: {
+		backgroundColor: c.black
+	},
+	spaceAround: {
+		justifyContent: 'space-around'
+	},
+	footer: {
+		height: 65,
+		padding: 10,
+		backgroundColor: c.black
 	}
 });
 

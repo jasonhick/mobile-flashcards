@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet, Animated } from 'react-native';
 import {
 	Container,
 	Header,
@@ -31,6 +31,25 @@ class Quiz extends Component {
 		showAnswer: false
 	};
 
+	componentWillMount() {
+		this.animatedValue = new Animated.Value(0);
+		this.value = 0;
+
+		this.animatedValue.addListener(({ value }) => {
+			this.value = value;
+		});
+
+		this.frontInterpolate = this.animatedValue.interpolate({
+			inputRange: [0, 180],
+			outputRange: ['0deg', '180deg']
+		});
+
+		this.backInterpolate = this.animatedValue.interpolate({
+			inputRange: [0, 180],
+			outputRange: ['180deg', '360deg']
+		});
+	}
+
 	// Check to see if the quiz is complete before rendering
 	// If it is, show the score screen
 	shouldComponentUpdate(nextProps, nextState) {
@@ -51,7 +70,9 @@ class Quiz extends Component {
 		const { questions } = this.props.deck;
 		const count = this.state.counter + 1;
 		const complete = count >= questions.length ? true : false;
+		// answer correct/incorrect
 		which();
+		// hide the correct/incorrect buttons
 		this.showAnswer(false);
 	};
 
@@ -69,6 +90,18 @@ class Quiz extends Component {
 	};
 
 	showAnswer = which => {
+		if (this.value >= 90) {
+			Animated.spring(this.animatedValue, {
+				toValue: 0,
+				duration: 800
+			}).start();
+		} else {
+			Animated.spring(this.animatedValue, {
+				toValue: 180,
+				duration: 800
+			}).start();
+		}
+
 		this.setState({
 			showAnswer: which
 		});
@@ -77,6 +110,14 @@ class Quiz extends Component {
 	render() {
 		const { deck, navigation } = this.props;
 		const { counter, score, showAnswer } = this.state;
+
+		const frontAnimatedStyle = {
+			transform: [{ rotateY: this.frontInterpolate }]
+		};
+		const backAnimatedStyle = {
+			transform: [{ rotateY: this.backInterpolate }]
+		};
+
 		return (
 			<Container>
 				<Header iosBarStyle="light-content" style={[s.header]}>
@@ -87,38 +128,37 @@ class Quiz extends Component {
 					</Left>
 					<Body>
 						<Title style={[s.title]}>Quiz</Title>
+						<Subtitle>{deck.title}</Subtitle>
 					</Body>
 					<Right />
 				</Header>
 
-				<Content contentContainerStyle={[s.content]} padder>
-					<View style={[s.flexRows]}>
-						<H2 style={[s.qTitle]}>{deck.title}</H2>
-						<Text style={[s.qCount]}>
-							{counter + 1} of {deck.questions.length}
-						</Text>
-					</View>
+				<Content style={[s.content]}>
+					<Text style={[s.count]}>
+						{counter + 1} of {deck.questions.length}
+					</Text>
 
-					{showAnswer ? (
-						<View style={[s.flexCols, s.card]}>
-							<Text style={[s.questionTitle]}>Answer:</Text>
-							<Text style={[s.text, s.answer]}>
-								{deck.questions[counter].answer}
-							</Text>
-						</View>
-					) : (
-						<View style={[s.card]}>
-							<Text style={[s.questionTitle]}>Question:</Text>
-							<Text style={[s.question]}>
+					<View style={[s.container]}>
+						<Animated.View style={[s.flipCard, frontAnimatedStyle]}>
+							<Text style={[s.cardTitle]}>Q</Text>
+							<Text style={[s.cardText]}>
 								{deck.questions[counter].question}
 							</Text>
-						</View>
-					)}
+							<Text style={[s.cardTitle, s.flexEnd]}>Q</Text>
+						</Animated.View>
+
+						<Animated.View
+							style={[s.flipCard, backAnimatedStyle, s.flipCardBack]}>
+							<Text style={[s.cardTitle]}>A</Text>
+							<Text style={[s.cardText]}>{deck.questions[counter].answer}</Text>
+							<Text style={[s.cardTitle, s.flexEnd]}>A</Text>
+						</Animated.View>
+					</View>
 				</Content>
 
 				<Footer style={[s.footer]}>
 					{showAnswer ? (
-						<View style={[s.flexRows]}>
+						<View style={[s.container, s.rows]}>
 							<Button
 								style={[s.button]}
 								success
@@ -147,59 +187,54 @@ class Quiz extends Component {
 }
 
 const s = StyleSheet.create({
+	container: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
+	rows: {
+		flexDirection: 'row'
+	},
+	flipCard: {
+		justifyContent: 'space-between',
+		width: 260,
+		height: 400,
+		paddingVertical: 0,
+		paddingHorizontal: 10,
+		backgroundColor: c.white,
+		borderColor: c.gold,
+		borderWidth: 10,
+		borderRadius: 15,
+		backfaceVisibility: 'hidden'
+	},
+	flipCardBack: {
+		borderColor: c.white,
+		backgroundColor: c.gold,
+		position: 'absolute'
+	},
 	header: {
 		backgroundColor: c.black
 	},
 	title: {
 		color: c.white
 	},
-	subtitle: {
-		color: c.white
+	count: {
+		marginVertical: 30,
+		color: c.white,
+		textAlign: 'center'
 	},
 	content: {
-		display: 'flex',
-		alignItems: 'stretch'
+		backgroundColor: c.black
 	},
-	flexCols: {
-		display: 'flex',
-		flexDirection: 'column'
-	},
-	flexRows: {
-		display: 'flex',
-		flexDirection: 'row',
-		justifyContent: 'center'
-	},
-	qTitle: {
-		flex: 1
-	},
-	qCount: {
-		flex: 1,
-		color: c.darkgrey,
-		textAlign: 'right'
-	},
-	card: {
-		marginVertical: 20,
-		paddingVertical: 20,
-		paddingHorizontal: 10,
-		borderRadius: 12,
-		borderWidth: 6,
-		borderColor: c.white,
-		backgroundColor: c.grey
-	},
-	questionTitle: {
-		marginBottom: 10,
-		fontSize: 18,
+	cardTitle: {
+		fontSize: 40,
 		fontWeight: 'bold',
-		color: c.darkgrey,
-		textAlign: 'center'
+		color: c.darkgrey
 	},
-	question: {
+	cardText: {
 		marginBottom: 20,
-		color: c.nearblack,
-		textAlign: 'center'
-	},
-	answer: {
-		marginBottom: 20,
+		fontSize: 24,
+		color: c.black,
 		textAlign: 'center'
 	},
 	button: {
@@ -212,11 +247,11 @@ const s = StyleSheet.create({
 	footer: {
 		height: 65,
 		padding: 10,
-		backgroundColor: c.grey
+		backgroundColor: c.black
 	},
-	bold: {
-		fontWeight: 'bold',
-		textAlign: 'center'
+	flexEnd: {
+		alignSelf: 'flex-end',
+		transform: [{ rotateX: '180deg' }, { rotateY: '180deg' }]
 	}
 });
 
