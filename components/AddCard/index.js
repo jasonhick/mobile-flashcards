@@ -26,29 +26,28 @@ import { saveCard } from '../../actions/cards';
 
 class AddCard extends Component {
 	state = {
-		id: '',
 		question: '',
 		answer: ''
 	};
 
 	submitCard() {
-		const { navigation, saveCard } = this.props;
+		const { deck, navigation, saveCard } = this.props;
 		const id = cuid();
 		const { question, answer } = this.state;
-		const { deck } = navigation.state.params;
 		const card = {
+			parentId: deck.id,
+			parentTitle: deck.title,
 			id,
 			question,
 			answer
 		};
 
-		saveCard(deck, card);
+		saveCard(card);
 		navigation.goBack();
 	}
 
 	render() {
-		const { navigation } = this.props;
-		const { title, deck } = navigation.state.params;
+		const { deck, navigation } = this.props;
 		return (
 			<Container>
 				<Header iosBarStyle="light-content" style={[s.header]}>
@@ -58,12 +57,13 @@ class AddCard extends Component {
 						</Button>
 					</Left>
 					<Body>
-						<Title style={[s.title]}>{title}</Title>
-						<Subtitle>{deck}</Subtitle>
+						<Title style={[s.title]}>Add Card</Title>
+						<Subtitle>{deck.title}</Subtitle>
 					</Body>
 					<Right />
 				</Header>
 				<Content padder>
+					<Text>{deck.id}</Text>
 					<Form style={[s.form]}>
 						<Label>Question</Label>
 						<Item style={[s.item]}>
@@ -110,5 +110,12 @@ const s = StyleSheet.create({
 	}
 });
 
+function mapStateToProps(state, { navigation }) {
+	const { deck } = navigation.state.params;
+	return {
+		deck: state.decks[deck.title]
+	};
+}
+
 const mapDispatchToProps = { saveCard };
-export default connect(null, mapDispatchToProps)(AddCard);
+export default connect(mapStateToProps, mapDispatchToProps)(AddCard);

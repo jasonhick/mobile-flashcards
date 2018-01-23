@@ -5,10 +5,10 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import * as c from '../../utils/colors';
 
 const DeckLink = ({ deck, navigation }) => (
-	<View>
+	<View style={[s.view]}>
 		<TouchableOpacity
-			style={[s.view]}
-			onPress={() => navigation.navigate('Deck', { title: deck.title })}>
+			style={[s.button]}
+			onPress={() => navigation.navigate('Deck', { deck })}>
 			<Text style={[s.title]}>{deck.title}</Text>
 			<Text style={[s.subtitle]}>{deck.questions.length} questions</Text>
 		</TouchableOpacity>
@@ -17,11 +17,8 @@ const DeckLink = ({ deck, navigation }) => (
 
 const s = StyleSheet.create({
 	view: {
-		marginTop: 5,
-		marginHorizontal: 50,
-		paddingVertical: 10,
-		borderRadius: 10,
-		backgroundColor: c.gold
+		display: 'flex',
+		alignItems: 'center'
 	},
 	title: {
 		fontSize: 18,
@@ -33,6 +30,14 @@ const s = StyleSheet.create({
 		textAlign: 'center',
 		fontSize: 10,
 		color: c.nearblack
+	},
+	button: {
+		width: 200,
+		marginTop: 5,
+		paddingVertical: 10,
+		borderRadius: 10,
+		backgroundColor: c.gold,
+		justifyContent: 'center'
 	}
 });
 

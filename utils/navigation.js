@@ -3,6 +3,8 @@ import { Text, Platform } from 'react-native';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 import Decks from '../components/Decks';
 import Deck from '../components/Deck';
+import Quiz from '../components/Quiz';
+import Score from '../components/Score';
 import AddDeck from '../components/AddDeck';
 import AddCard from '../components/AddCard';
 import * as c from './colors';
@@ -20,11 +22,22 @@ export const Stacks = StackNavigator(
 		Card: {
 			screen: AddCard
 		},
+		Quiz: {
+			screen: Quiz
+		},
+		Score: {
+			screen: Score
+		},
 		AddCard: {
 			screen: AddCard
 		}
 	},
-	{ headerMode: 'none' }
+	{
+		headerMode: 'none',
+		navigationOptions: {
+			gesturesEnabled: false
+		}
+	}
 );
 
 export const Tabs = TabNavigator(

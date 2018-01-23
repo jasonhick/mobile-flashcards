@@ -25,7 +25,6 @@ import CardLink from '../CardLink';
 class Deck extends Component {
 	render() {
 		const { deck, navigation } = this.props;
-		const { title } = navigation.state.params;
 		return (
 			<Container>
 				<Header iosBarStyle="light-content" style={[s.header]}>
@@ -35,7 +34,7 @@ class Deck extends Component {
 						</Button>
 					</Left>
 					<Body>
-						<Title style={[s.title]}>{title}</Title>
+						<Title style={[s.title]}>{deck.title}</Title>
 						<Subtitle style={[s.subtitle]}>
 							{deck.questions.length} questions
 						</Subtitle>
@@ -45,31 +44,48 @@ class Deck extends Component {
 				<Content padder>
 					<Button
 						block
-						rounded
-						bordered
 						dark
+						bordered
 						style={[s.button]}
 						onPress={() =>
 							navigation.navigate('AddCard', {
 								title: 'Add a new card',
-								deck: title
+								deck
 							})
 						}>
-						<Text>Add a {title} question</Text>
+						<Text>Add Card</Text>
 					</Button>
 
-					<Button block rounded dark style={[s.button]}>
-						<Text>Start quiz</Text>
-					</Button>
+					{deck.questions.length > 0 ? (
+						<Content>
+							<Button
+								block
+								dark
+								bordered
+								style={[s.button]}
+								onPress={() => navigation.navigate('Quiz', { deck })}>
+								<Text>Start Quiz</Text>
+							</Button>
 
-					<FlatList
-						style={[s.list]}
-						data={deck.questions}
-						keyExtractor={(item, index) => index}
-						renderItem={({ item }) => (
-							<CardLink deck={deck} card={item} navigation={navigation} />
-						)}
-					/>
+							<FlatList
+								style={[s.list]}
+								data={deck.questions}
+								keyExtractor={item => item.id}
+								renderItem={({ item }) => (
+									<CardLink deck={deck} card={item} navigation={navigation} />
+								)}
+							/>
+						</Content>
+					) : (
+						<Content>
+							<Text style={[s.text]}>
+								You don't have any cards in this deck.
+							</Text>
+							<Text style={[s.text]}>
+								Add at least 1 card to enable the quiz.
+							</Text>
+						</Content>
+					)}
 				</Content>
 			</Container>
 		);
@@ -87,7 +103,8 @@ const s = StyleSheet.create({
 		color: c.white
 	},
 	button: {
-		marginVertical: 5
+		marginVertical: 5,
+		backgroundColor: c.gold
 	},
 	list: {
 		marginVertical: 20,
@@ -95,13 +112,18 @@ const s = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: c.midgrey,
 		backgroundColor: c.white
+	},
+	text: {
+		marginVertical: 10,
+		marginHorizontal: 100,
+		textAlign: 'center'
 	}
 });
 
 function mapStateToProps(state, { navigation }) {
-	const { title } = navigation.state.params;
+	const { deck } = navigation.state.params;
 	return {
-		deck: state.decks[title]
+		deck: state.decks[deck.title]
 	};
 }
 

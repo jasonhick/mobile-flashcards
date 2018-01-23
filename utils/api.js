@@ -61,18 +61,20 @@ export function dbSaveDeck(deck) {
 	);
 }
 
-export function dbSaveCard(deck, card) {
+export function dbSaveCard(card) {
 	return AsyncStorage.getItem(ASYNC_STORAGE_KEY).then(result => {
 		const data = JSON.parse(result);
 
-		let questions = data[deck].questions;
+		let questions = data[card.parentTitle].questions;
+		const { parentId, parentTitle } = card;
 		questions.push(card);
 
 		AsyncStorage.mergeItem(
 			ASYNC_STORAGE_KEY,
 			JSON.stringify({
-				[deck]: {
-					deck,
+				[parentTitle]: {
+					parentTitle,
+					parentId,
 					questions
 				}
 			})

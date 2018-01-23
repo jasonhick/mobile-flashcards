@@ -38,7 +38,9 @@ class App extends React.Component {
 
 const s = StyleSheet.create({
 	view: {
-		flex: 1
+		display: 'flex',
+		flex: 1,
+		justifyContent: 'center'
 	}
 });
 

@@ -27,25 +27,21 @@ class Decks extends Component {
 		this.props.getAllDecks();
 	}
 
-	handleOnRefreshData = () => {
-		this.props.getAllDecks();
-	};
-
 	render() {
 		const { decks, navigation } = this.props;
 		return (
-			<Container>
+			<Container style={[s.container]}>
 				<Header iosBarStyle="light-content" style={[s.header]}>
 					<Body>
 						<Title style={[s.title]}>Mobile Flashcards</Title>
 					</Body>
 				</Header>
-				<Content>
+				<Content contentContainerStyle={[s.content]}>
 					<FlatList
 						data={decks}
-						keyExtractor={(item, index) => index}
+						keyExtractor={item => item.id}
 						renderItem={({ item }) => (
-							<DeckLink key={item.title} deck={item} navigation={navigation} />
+							<DeckLink deck={item} navigation={navigation} />
 						)}
 					/>
 				</Content>
@@ -55,8 +51,17 @@ class Decks extends Component {
 }
 
 const s = StyleSheet.create({
+	container: {
+		borderStyle: 'solid',
+		borderWidth: 1
+	},
 	header: {
 		backgroundColor: c.black
+	},
+	content: {
+		display: 'flex',
+		flex: 1,
+		justifyContent: 'center'
 	},
 	title: {
 		color: c.white
