@@ -6,14 +6,7 @@ import s from '../../utils/styles';
 
 const CardLink = ({ deck, card, navigation }) => (
 	<View>
-		<TouchableOpacity
-			style={[s.cardLink]}
-			onPress={() =>
-				navigation.navigate('AddCard', {
-					title: 'Edit card',
-					subtitle: deck.title
-				})
-			}>
+		<TouchableOpacity style={[s.cardLink]}>
 			<Text numberOfLines={1}>{card.question}</Text>
 		</TouchableOpacity>
 	</View>
