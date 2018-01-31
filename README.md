@@ -19,4 +19,13 @@ NB: You will need to use either Expo and a mobile device or have either an Andro
 * Run `yarn start` to start both servers
 * Follow the onscreen instructions to launch either the iOS or Andriod simulators
 
+### Notifications
+
+Daily notifications have been set to trigger at 12:30pm.
+To test local notifications more sooner than tomorrow(!) uncomment
+line 44 in notifications.js:
+// tomorrow.setDate(tomorrow.getTime() + 60000);
+
+Notifications will be set for 60 seconds in the future every time you complete a quiz.
+
 This project was bootstrapped with [Create React Native App](https://github.com/react-community/create-react-native-app).
