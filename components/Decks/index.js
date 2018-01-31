@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet } from 'react-native';
 import {
 	Container,
 	Header,
@@ -18,9 +18,9 @@ import {
 import { connect } from 'react-redux';
 import DeckLink from '../DeckLink';
 import { Constants } from 'expo';
-import * as c from '../../utils/colors';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { getAllDecks } from '../../actions/decks';
+import s from '../../utils/styles';
 
 class Decks extends Component {
 	componentDidMount() {
@@ -30,16 +30,17 @@ class Decks extends Component {
 	render() {
 		const { decks, navigation } = this.props;
 		return (
-			<Container style={[s.container]}>
-				<Header iosBarStyle="light-content" style={[s.header]}>
+			<Container style={[s.flex, s.bgBlack]}>
+				<Header iosBarStyle="light-content" style={[s.bgBlack]}>
 					<Body>
-						<Title style={[s.title]}>Mobile Flashcards</Title>
+						<Title style={[s.white]}>Mobile Flashcards</Title>
 					</Body>
 				</Header>
-				<Content contentContainerStyle={[s.content]}>
+				<Content padder>
 					<FlatList
 						data={decks}
 						keyExtractor={item => item.id}
+						numColumns={3}
 						renderItem={({ item }) => (
 							<DeckLink deck={item} navigation={navigation} />
 						)}
@@ -49,24 +50,6 @@ class Decks extends Component {
 		);
 	}
 }
-
-const s = StyleSheet.create({
-	container: {
-		borderStyle: 'solid',
-		borderWidth: 1
-	},
-	header: {
-		backgroundColor: c.black
-	},
-	content: {
-		display: 'flex',
-		flex: 1,
-		justifyContent: 'center'
-	},
-	title: {
-		color: c.white
-	}
-});
 
 const mapStateToProps = state => ({
 	decks: Object.keys(state.decks).map(deck => state.decks[deck])

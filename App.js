@@ -5,7 +5,8 @@ import Expo, { AppLoading } from 'expo';
 import configureStore from './utils/configureStore';
 import MyStatusBar from './components/MyStatusBar';
 import { Tabs, Stacks } from './utils/navigation';
-import * as c from './utils/colors';
+import { setLocalNotification } from './utils/notifications';
+import s from './utils/styles';
 
 const store = configureStore();
 
@@ -20,6 +21,10 @@ class App extends React.Component {
 		this.setState({ fontsLoaded: true });
 	}
 
+	componentDidMount() {
+		setLocalNotification();
+	}
+
 	render() {
 		if (!this.state.fontsLoaded) {
 			return <AppLoading />;
@@ -27,7 +32,7 @@ class App extends React.Component {
 
 		return (
 			<Provider store={store}>
-				<View style={s.view}>
+				<View style={s.flex}>
 					<MyStatusBar />
 					<Tabs />
 				</View>
@@ -35,13 +40,5 @@ class App extends React.Component {
 		);
 	}
 }
-
-const s = StyleSheet.create({
-	view: {
-		display: 'flex',
-		flex: 1,
-		justifyContent: 'center'
-	}
-});
 
 export default App;

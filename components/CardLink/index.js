@@ -2,12 +2,12 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Constants } from 'expo';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import * as c from '../../utils/colors';
+import s from '../../utils/styles';
 
 const CardLink = ({ deck, card, navigation }) => (
 	<View>
 		<TouchableOpacity
-			style={[s.item]}
+			style={[s.cardLink]}
 			onPress={() =>
 				navigation.navigate('AddCard', {
 					title: 'Edit card',
@@ -18,14 +18,5 @@ const CardLink = ({ deck, card, navigation }) => (
 		</TouchableOpacity>
 	</View>
 );
-
-const s = StyleSheet.create({
-	item: {
-		paddingVertical: 15,
-		paddingHorizontal: 10,
-		borderBottomWidth: 1,
-		borderBottomColor: c.grey
-	}
-});
 
 export default CardLink;

@@ -63,7 +63,6 @@ class AddCard extends Component {
 					<Right />
 				</Header>
 				<Content padder>
-					<Text>{deck.id}</Text>
 					<Form style={[s.form]}>
 						<Label>Question</Label>
 						<Item style={[s.item]}>

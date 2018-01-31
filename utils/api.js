@@ -26,8 +26,8 @@ function loadInitialData() {
 			questions: [
 				{
 					id: 'cjchb9qb800020405muiutk83',
-					question: 'A female cat is called a...',
-					answer: 'Queen'
+					question: 'What name is given to a female cat?',
+					answer: 'A Queen'
 				},
 				{
 					id: 'cjchb9qb800020405muiutk84',
@@ -36,8 +36,8 @@ function loadInitialData() {
 				},
 				{
 					id: 'cjchb9qb800020405muiutk95',
-					question: 'Name a famous cartoon cat.',
-					answer: 'Garfield. Top Cat. Cheshire Cat.'
+					question: 'Name a famous cat cartoon character.',
+					answer: 'Garfield. Top Cat. Cheshire Cat. Tom (& Jerry).'
 				},
 				{
 					id: 'cjchb9qb801020405muiutk65',
@@ -58,6 +58,7 @@ function loadInitialData() {
 }
 
 export function setupInitialResults(results) {
+  // toggle the comments on these 2 lines to reset data
 	return results === null ? loadInitialData() : JSON.parse(results);
 	// return loadInitialData();
 }

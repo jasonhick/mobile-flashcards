@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { NavigationActions } from 'react-navigation';
 import { View, FlatList, StyleSheet } from 'react-native';
 import {
 	Container,
@@ -22,12 +23,19 @@ import {
 } from 'native-base';
 import { connect } from 'react-redux';
 import { Constants } from 'expo';
-import * as c from '../../utils/colors';
+import {
+	clearLocalNotification,
+	setLocalNotification
+} from '../../utils/notifications';
+import s from '../../utils/styles';
 
 class Score extends Component {
+	componentDidMount() {
+		clearLocalNotification().then(setLocalNotification);
+	}
+
 	showScoreMessage = percentage => {
 		let msg = '';
-
 		if (percentage === 0) {
 			msg = 'Really? Zero? You cannot be serious!!';
 		} else if (percentage > 0 && percentage <= 25) {
@@ -46,6 +54,18 @@ class Score extends Component {
 		return msg;
 	};
 
+	reset() {
+		const { deck } = this.props;
+		this.props.navigation.dispatch(
+			NavigationActions.reset({
+				index: 0,
+				actions: [
+					NavigationActions.navigate({ routeName: 'Deck', params: { deck } })
+				]
+			})
+		);
+	}
+
 	render() {
 		const { navigation, deck } = this.props;
 		const { score } = navigation.state.params;
@@ -58,91 +78,34 @@ class Score extends Component {
 						<Title style={[s.title]}>Score</Title>
 					</Body>
 				</Header>
-				<Content contentContainerStyle={[s.flexRow, s.bgBlack]}>
-					<View style={[s.flexCols]}>
-						<Text style={[s.text, s.score]}>{percentage}%</Text>
-						{score === 1 ? (
-							<Text style={[s.text]}>You got 1 question wrong</Text>
-						) : (
-							<Text style={[s.text]}>
-								You got {deck.questions.length - score} questions wrong
-							</Text>
-						)}
-						<Text style={[s.text, s.tease]}>{msg}</Text>
-					</View>
-				</Content>
+				<Content contentContainerStyle={[s.flex, s.fAIC, s.fJCC, s.bgBlack]}>
+					<Text style={[s.mv, s.white, s.score]}>{percentage}%</Text>
+					{deck.questions.length - score === 1 ? (
+						<Text style={[s.white]}>You got 1 question wrong</Text>
+					) : (
+						<Text style={[s.white]}>
+							You got {deck.questions.length - score} questions wrong
+						</Text>
+					)}
+					<Text style={[s.mv, s.white, s.tease]}>{msg}</Text>
 
-				<Footer>
-					<View style={[s.flexRow, s.spaceAround, s.footer]}>
-						<Button block onPress={() => navigation.navigate('Quiz', { deck })}>
+					<View style={[s.flexRow]}>
+						<Button
+							block
+							style={[s.mhs]}
+							onPress={() => navigation.navigate('Quiz', { deck })}>
 							<Text>Restart Quiz</Text>
 						</Button>
 
-						<Button
-							block
-							onPress={() =>
-								navigation.navigate('Deck', {
-									deck
-								})
-							}>
+						<Button block style={[s.mhs]} onPress={() => this.reset()}>
 							<Text>Back to Deck</Text>
 						</Button>
 					</View>
-				</Footer>
+				</Content>
 			</Container>
 		);
 	}
 }
-
-const s = StyleSheet.create({
-	header: {
-		backgroundColor: c.black
-	},
-	text: {
-		marginVertical: 10,
-		color: c.white
-	},
-	score: {
-		fontSize: 70
-	},
-	tease: {
-		marginHorizontal: 40,
-		fontSize: 40,
-		textAlign: 'center'
-	},
-	center: {
-		textAlign: 'center'
-	},
-	button: {
-		marginVertical: 5,
-		backgroundColor: c.gold
-	},
-	center: {
-		textAlign: 'center'
-	},
-	flexRow: {
-		flex: 1,
-		flexDirection: 'row'
-	},
-	flexCols: {
-		flex: 1,
-		flexDirection: 'column',
-		alignItems: 'center',
-		justifyContent: 'center',
-		borderColor: c.black
-	},
-	bgBlack: {
-		backgroundColor: c.black
-	},
-	spaceAround: {
-		justifyContent: 'space-around'
-	},
-	footer: {
-		height: 65,
-		padding: 10,
-		backgroundColor: c.black
-	}
-});
 
 function mapStateToProps(state, { navigation }) {
 	const { deck } = navigation.state.params;
