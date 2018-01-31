@@ -14,6 +14,7 @@ The site uses React Native with Redux and follows the [project rubric](https://r
 NB: You will need to use either Expo and a mobile device or have either an Android or iOS simulator installed locally.
 
 * Clone this repository onto your computer
+* cd into the 'mobile-flashcards' directory
 * Run `yarn install` from the root directory of the app
 * Run `yarn start` to start both servers
 * Follow the onscreen instructions to launch either the iOS or Andriod simulators
