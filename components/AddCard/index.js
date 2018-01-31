@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Keyboard, StyleSheet } from 'react-native';
+import { Keyboard, StyleSheet, Alert } from 'react-native';
 import {
 	Container,
 	Left,
@@ -27,13 +27,32 @@ import { saveCard } from '../../actions/cards';
 class AddCard extends Component {
 	state = {
 		question: '',
-		answer: ''
+		answer: '',
+		isCardValid: false
 	};
+
+	handleQuestionChangeText(question) {
+		const isCardValid =
+			this.state.question.length > 0 && this.state.answer.length > 0;
+		this.setState({
+			question,
+			isCardValid
+		});
+	}
+
+	handleAnswerChangeText(answer) {
+		const isCardValid =
+			this.state.question.length > 0 && this.state.answer.length > 0;
+		this.setState({
+			answer,
+			isCardValid
+		});
+	}
 
 	submitCard() {
 		const { deck, navigation, saveCard } = this.props;
 		const id = cuid();
-		const { question, answer } = this.state;
+		const { question, answer, isCardValid } = this.state;
 		const card = {
 			parentId: deck.id,
 			parentTitle: deck.title,
@@ -42,8 +61,19 @@ class AddCard extends Component {
 			answer
 		};
 
-		saveCard(card);
-		navigation.goBack();
+		if (!isCardValid) {
+			Alert.alert(
+				'Invalid form',
+				"Please make sure you've added both a question and an answer",
+				[{ text: 'OK' }],
+				{
+					cancelable: true
+				}
+			);
+		} else {
+			saveCard(card);
+			navigation.goBack();
+		}
 	}
 
 	render() {
@@ -68,7 +98,7 @@ class AddCard extends Component {
 						<Item style={[s.item]}>
 							<Input
 								multiline={true}
-								onChangeText={question => this.setState({ question })}
+								onChangeText={this.handleQuestionChangeText.bind(this)}
 								value={this.state.question}
 							/>
 						</Item>
@@ -76,7 +106,7 @@ class AddCard extends Component {
 						<Item style={[s.item]}>
 							<Input
 								multiline={true}
-								onChangeText={answer => this.setState({ answer })}
+								onChangeText={this.handleAnswerChangeText.bind(this)}
 								value={this.state.answer}
 							/>
 						</Item>
