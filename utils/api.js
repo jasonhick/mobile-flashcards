@@ -58,7 +58,7 @@ function loadInitialData() {
 }
 
 export function setupInitialResults(results) {
-  // toggle the comments on these 2 lines to reset data
+	// toggle the comments on these 2 lines to reset data
 	return results === null ? loadInitialData() : JSON.parse(results);
 	// return loadInitialData();
 }

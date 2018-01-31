@@ -56,6 +56,10 @@ class Quiz extends Component {
 		});
 	}
 
+	componentWillUnmount() {
+		this.animatedValue.removeAllListeners();
+	}
+
 	// Check to see if the quiz is complete before rendering
 	// If it is, show the score screen
 	shouldComponentUpdate(nextProps, nextState) {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Keyboard, StyleSheet } from 'react-native';
+import { Keyboard, StyleSheet, Alert } from 'react-native';
 import {
 	Container,
 	Header,
@@ -27,17 +27,41 @@ class AddDeck extends Component {
 		isValid: false
 	};
 
-	saveDeck() {
+	handleOnChangeText(title) {
+		const isValid = title || false;
+		this.setState({
+			title,
+			isValid
+		});
+	}
+
+	btnSaveDeck() {
 		const { navigation, saveDeck } = this.props;
-		const { id, title } = this.state;
+		const { id, title, isValid } = this.state;
 		const deck = {
 			id: cuid(),
-			title
+			title,
+			questions: []
 		};
 
-		Keyboard.dismiss();
-		saveDeck(deck);
-		navigation.navigate('Decks');
+		if (!isValid) {
+			Alert.alert(
+				'Invalid form',
+				'Please enter a deck title',
+				[{ text: 'OK' }],
+				{
+					cancelable: true
+				}
+			);
+		} else {
+			Keyboard.dismiss();
+			saveDeck(deck);
+
+			// Add a slight delay before navigating as the item may not have been created yet
+			setTimeout(function() {
+				navigation.navigate('Deck', { deck });
+			}, 200);
+		}
 	}
 
 	render() {
@@ -53,12 +77,12 @@ class AddDeck extends Component {
 						<Item underline>
 							<Label>Deck title</Label>
 							<Input
-								onChangeText={title => this.setState({ title })}
+								onChangeText={this.handleOnChangeText.bind(this)}
 								value={this.state.title}
 							/>
 						</Item>
 					</Form>
-					<Button block success onPress={this.saveDeck.bind(this)}>
+					<Button block success onPress={this.btnSaveDeck.bind(this)}>
 						<Text>Save</Text>
 					</Button>
 				</Content>

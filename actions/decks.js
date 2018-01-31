@@ -20,6 +20,3 @@ export const getAllDecks = () => dispatch =>
 
 export const saveDeck = deck => dispatch =>
 	api.dbSaveDeck(deck).then(() => dispatch(addDeck(deck)));
-
-// export const addNewDeck = title => dispatch =>
-// 	api.addCardToDeck(title).then(() => dispatch(addDeck(title)));
